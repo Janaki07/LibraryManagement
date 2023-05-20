@@ -19,7 +19,6 @@ public class test {
      Book b = new Book();
      Member m= new Member();
      BookDAO bd = new BookDAO();
-     Map<Book, Member> bookMemberMap = new HashMap<>();
     System.out.println("Enter book name : ");
     String bname=sc.next();
     b.setBookname(bname);
