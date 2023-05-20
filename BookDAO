@@ -1,0 +1,28 @@
+package com.library.dao;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.List;
+
+import com.library.model.Book;
+import com.library.model.Member;
+public class BookDAO {
+  Book b=new Book();
+  Member m = new Member();
+  String url = "jdbc:mysql://localhost:3306/emp_management";
+  String username = "root";
+  String password = "RootPassword@7";
+ public void addMember(List bl,List ml){
+	 System.out.println(bl);
+	 System.out.println(ml);
+  try (Connection connection = DriverManager.getConnection(url, username, password)) {
+      String sql = "INSERT INTO memberdetails (mid, bookid, mname,bookborroweddate,returnconfirmation) VALUES (?, ?, ?,?,?)";
+
+
+}
+  catch (SQLException e) {
+      e.printStackTrace();
+  }
+
+}}
