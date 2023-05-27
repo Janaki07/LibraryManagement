@@ -3,7 +3,9 @@ package com.library.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import com.library.model.Book;
@@ -14,11 +16,68 @@ public class BookDAO {
   String url = "jdbc:mysql://localhost:3306/emp_management";
   String username = "root";
   String password = "RootPassword@7";
+  Statement statement = null;
+  ResultSet resultSet = null;
+
+  public void checkBooklist() {
+	  try (Connection connection = DriverManager.getConnection(url, username, password)) {
+		  statement = connection.createStatement();
+
+		  String sql = "select * from emp_management.books ";
+		    resultSet = statement.executeQuery(sql);
+		    System.out.println(resultSet);
+		    while (resultSet.next()) {
+		        // Retrieve data from the result set
+		        String bookname = resultSet.getString("title");
+		        String author = resultSet.getString("author");
+		        String bookid = resultSet.getString("bookid");
+		        String avilablity = resultSet.getString("avilable");
+		        // Do something with the retrieved data
+		        // For example, print it
+		        System.out.println("bookid : "+bookid+"bookname: " + bookname + ", author: " + author +", avilablility "+avilablity);
+		    }
+			  }
+	  catch (SQLException e) {
+		    System.out.println("Invalied");
+		}
+  }
+  public void Memberdetails(int mid) {
+	  try (Connection connection = DriverManager.getConnection(url, username, password)) {
+		  int memberId = mid; // The memberId you want to search for
+		  statement = connection.createStatement();
+
+		    String query = "SELECT * FROM memberdetails WHERE mid = " + memberId ;
+		    System.out.println(query);
+		    System.out.println(memberId);
+		    
+		    resultSet = statement.executeQuery(query);
+		    System.out.println(resultSet);
+		    if (!resultSet.isBeforeFirst()) {
+		        System.out.println("No rows found matching the condition.");
+		    } else {
+		        while (resultSet.next()) {
+		            // Retrieve data from the result set
+		            String column1Value = resultSet.getString("bookid");
+		            String column2Value = resultSet.getString("mname");
+		            String bookborroweddate = resultSet.getString("bookborroweddate");
+		            String   returnconfirmation=resultSet.getString("returnconfirmation");
+		            // Do something with the retrieved data
+		            // For example, print it
+		            System.out.println("Column1: " + column1Value + ", Column2: " + column2Value+", bookborroweddate : " +bookborroweddate +"returnconfirmation : "+returnconfirmation);
+		        }
+		    }
+
+			  }
+	  catch (SQLException e) {
+		    System.out.println("Invalied");
+		}
+  }
  public void addMember(List<Book> bl,List<Member> ml){
 	 System.out.println(bl);
 	 System.out.println(ml);
 	 
   try (Connection connection = DriverManager.getConnection(url, username, password)) {
+	 
 	  for (Book book : bl) {
 		  System.out.println(book.getBookid());
 		  System.out.println(book.getBookname());
@@ -35,7 +94,7 @@ public class BookDAO {
 
       }
 	  for (Member mem : ml) {
-		  String sql = "INSERT INTO memberdetails (mid, bookid, mname,returnconfirmation) VALUES (?, ?,?,?)";
+		  String sql = "INSERT INTO memberdetails (mid, bookid, mname,returnconfirmation,bookborroweddate) VALUES (?, ?,?,?,'23-89-2139')";
 		  PreparedStatement statement = connection.prepareStatement(sql);
           statement.setInt(1, mem.getMemberId());
           statement.setInt(2, mem.getBookborrowed());
