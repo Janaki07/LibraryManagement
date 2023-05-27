@@ -19,6 +19,15 @@ public class test {
      Book b = new Book();
      Member m= new Member();
      BookDAO bd = new BookDAO();
+	 bd.checkBooklist();
+     System.out.println("Enter your choice : ");
+     String choice = sc.next();
+     if(choice.equals("check")) {
+    	 System.out.println("enter memberid : ");
+    	 int mid = sc.nextInt();
+    	 bd.Memberdetails(mid);
+     }
+     else {
     System.out.println("Enter book name : ");
     String bname=sc.next();
     b.setBookname(bname);
@@ -45,11 +54,12 @@ b.setAuthor(author);
       String returnstatus = sc.next();
       m.setReturnstatus(returnstatus);
      System.out.println(b);
+     
      List<Book> bookList = new ArrayList<>();
      bookList.add(b);
      List<Member> MemberList = new ArrayList<>();
      MemberList.add(m);
      bd.addMember(bookList,MemberList );
 	}
-
+	}
 }
