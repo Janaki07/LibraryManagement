@@ -18,9 +18,11 @@ public class BookDAO {
   String password = "RootPassword@7";
   Statement statement = null;
   ResultSet resultSet = null;
-
+  public Connection getConnection() throws SQLException  {
+    return DriverManager.getConnection(url, username, password);
+}
   public void checkBooklist() {
-	  try (Connection connection = DriverManager.getConnection(url, username, password)) {
+	  try (Connection connection = getConnection()) {
 		  statement = connection.createStatement();
 
 		  String sql = "select * from emp_management.books ";
@@ -42,7 +44,7 @@ public class BookDAO {
 		}
   }
   public void Memberdetails(int mid) {
-	  try (Connection connection = DriverManager.getConnection(url, username, password)) {
+	  try (Connection connection = getConnection())  {
 		  int memberId = mid; // The memberId you want to search for
 		  statement = connection.createStatement();
 
@@ -72,18 +74,18 @@ public class BookDAO {
 		    System.out.println("Invalied");
 		}
   }
- public void addMember(List<Book> bl,List<Member> ml){
+ public void addBook(List<Book> bl,String op){
 	 System.out.println(bl);
-	 System.out.println(ml);
 	 
-  try (Connection connection = DriverManager.getConnection(url, username, password)) {
-	 
+  try  (Connection connection = getConnection()) {
 	  for (Book book : bl) {
 		  System.out.println(book.getBookid());
 		  System.out.println(book.getBookname());
 		  System.out.println(book.getAuthor());
 		  System.out.println(book.getAvailability());
+		  if(op.equals("insert")) {
 		  String sql = "INSERT INTO books (bookid, title, author,avilable) VALUES (?, ?,?,?)";
+		  
 		  PreparedStatement statement = connection.prepareStatement(sql);
           statement.setInt(1, book.getBookid());
           statement.setString(2, book.getBookname());
@@ -91,8 +93,23 @@ public class BookDAO {
           statement.setString(4, book.getAvailability());
           int rowsAffected = statement.executeUpdate();
           System.out.println(rowsAffected);
-
+		  }
+		  
       }
+	
+
+
+}
+  catch (SQLException e) {
+      e.printStackTrace();
+  }
+
+}
+ public void addMember(List<Member> ml,String op){
+	 System.out.println(ml);
+	 
+	 try (Connection connection = getConnection())  {
+	 
 	  for (Member mem : ml) {
 		  String sql = "INSERT INTO memberdetails (mid, bookid, mname,returnconfirmation,bookborroweddate) VALUES (?, ?,?,?,'23-89-2139')";
 		  PreparedStatement statement = connection.prepareStatement(sql);
@@ -102,7 +119,6 @@ public class BookDAO {
           statement.setString(4, mem.getReturnstatus());
           int rowsAffected = statement.executeUpdate();
           System.out.println(rowsAffected);
-
       }
 
 
@@ -111,4 +127,6 @@ public class BookDAO {
       e.printStackTrace();
   }
 
-}}
+}
+ 
+}
